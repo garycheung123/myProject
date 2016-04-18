@@ -1,0 +1,8 @@
+prefix=/home/gary/catkin_ws/install
+
+Name: camera_nav
+Description: Description of camera_nav
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/gary/catkin_ws/install/lib 
+Requires: 

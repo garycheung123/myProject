@@ -1,0 +1,35 @@
+# CMake generated Testfile for 
+# Source directory: /home/gary/catkin_ws/src
+# Build directory: /home/gary/catkin_ws/build
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+SUBDIRS(gtest)
+SUBDIRS(nao_pipeline/image_pipeline)
+SUBDIRS(nao_apps)
+SUBDIRS(nao_audio)
+SUBDIRS(nao_bringup)
+SUBDIRS(nao_interaction)
+SUBDIRS(nao_interaction_launchers)
+SUBDIRS(nao_robot)
+SUBDIRS(nao_vision)
+SUBDIRS(rbx1/rbx1)
+SUBDIRS(nao_interaction_msgs)
+SUBDIRS(camera_nav)
+SUBDIRS(face_recognize)
+SUBDIRS(rbx1/rbx1_bringup)
+SUBDIRS(nao_pipeline/camera_calibration)
+SUBDIRS(nav_test)
+SUBDIRS(rbx1/rbx1_vision)
+SUBDIRS(nao_pipeline/image_proc)
+SUBDIRS(nao_pipeline/image_view)
+SUBDIRS(rbx1/rbx1_dynamixels)
+SUBDIRS(hello/hello)
+SUBDIRS(rbx1/rbx1_speech)
+SUBDIRS(nao_pipeline/stereo_image_proc)
+SUBDIRS(nao_pipeline/depth_image_proc)
+SUBDIRS(rbx1/rbx1_apps)
+SUBDIRS(rbx1/rbx1_nav)
+SUBDIRS(nao_pipeline/image_rotate)
+SUBDIRS(rbx1/rbx1_description)
+SUBDIRS(nao_description)

@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "nao_apps")
+set(nao_apps_MAINTAINER "Vincent Rabaud <vincent.rabaud@gmail.com>")
+set(nao_apps_DEPRECATED "")
+set(nao_apps_VERSION "0.5.14")
+set(nao_apps_BUILD_DEPENDS )
+set(nao_apps_RUN_DEPENDS )
+set(nao_apps_BUILDTOOL_DEPENDS "catkin")

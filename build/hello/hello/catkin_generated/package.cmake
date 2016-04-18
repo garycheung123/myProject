@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "hello")
+set(hello_MAINTAINER "Patrick Goebel <patrick@pirobot.org>")
+set(hello_DEPRECATED "")
+set(hello_VERSION "0.4.0")
+set(hello_BUILD_DEPENDS "roscpp" "rospy" "pocketsphinx" "sound_play" "std_msgs")
+set(hello_RUN_DEPENDS "roscpp" "rospy" "pocketsphinx" "sound_play" "std_msgs")
+set(hello_BUILDTOOL_DEPENDS "catkin")

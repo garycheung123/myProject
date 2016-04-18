@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "nao_bringup")
+set(nao_bringup_MAINTAINER "Séverin Lemaignan <severin.lemaignan@epfl.ch>")
+set(nao_bringup_DEPRECATED "")
+set(nao_bringup_VERSION "0.5.14")
+set(nao_bringup_BUILD_DEPENDS )
+set(nao_bringup_RUN_DEPENDS "nao_description" "naoqi_driver" "naoqi_driver_py" "naoqi_sensors_py" "naoqi_pose" "robot_state_publisher" "diagnostic_aggregator")
+set(nao_bringup_BUILDTOOL_DEPENDS "catkin")

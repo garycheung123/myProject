@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "face_recognize")
+set(face_recognize_MAINTAINER "gary <gary@todo.todo>")
+set(face_recognize_DEPRECATED "")
+set(face_recognize_VERSION "0.0.0")
+set(face_recognize_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(face_recognize_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(face_recognize_BUILDTOOL_DEPENDS "catkin")

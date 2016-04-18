@@ -1,0 +1,29 @@
+<launch>
+  <arg name="nao_ip"          default="$(optenv NAO_IP 127.0.0.1)" />
+  <arg name="nao_port"        default="$(optenv NAO_PORT 9559)" />
+
+  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diag_agg" clear_params="true">
+    <rosparam command="load"  file="$(find nao_bringup)/config/nao_analysers.yaml" />
+  </node>
+
+  <!-- upload nao robot model V40 by default-->
+  <include file="$(find nao_description)/launch/robot_state_publisher.launch" >
+    <arg name="version"       value="V40" />
+  </include>
+
+  <include file="$(find nao_interaction_launchers)/launch/nao_vision_interface.launch">
+    <arg name="nao_ip"        value="$(arg nao_ip)" />
+  </include>
+
+  <include file="$(find naoqi_sensors_py)/launch/camera.launch" ns="nao_robot/camera/top" >
+    <arg name="nao_ip"        value="$(arg nao_ip)" />
+  </include>
+
+  <!-- publish joint states and basic actuators -->
+  <include file="$(find naoqi_driver_py)/launch/naoqi_driver.launch">
+    <arg name="nao_ip"        value="$(arg nao_ip)" />
+  </include>
+
+  <node name="face_recognize" pkg="face_recognize" type="face_recognize.py" output="screen" args="--pip=$(arg nao_ip) --pport=$(arg nao_port)" />
+
+</launch>

@@ -1,0 +1,8 @@
+prefix=/home/gary/catkin_ws/install
+
+Name: face_recognize
+Description: Description of face_recognize
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/gary/catkin_ws/install/lib 
+Requires: 

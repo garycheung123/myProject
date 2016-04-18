@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "nao_audio")
+set(nao_audio_MAINTAINER "Manos Tsardoulias <etsardou@gmail.com>, Vincent Rabaud <vincent.rabaud@gmail.com>")
+set(nao_audio_DEPRECATED "")
+set(nao_audio_VERSION "0.1.5")
+set(nao_audio_BUILD_DEPENDS )
+set(nao_audio_RUN_DEPENDS "nao_interaction_msgs" "rospy" "roslaunch" "std_msgs" "std_srvs")
+set(nao_audio_BUILDTOOL_DEPENDS "catkin")

@@ -1,0 +1,8 @@
+prefix=/home/gary/catkin_ws/install
+
+Name: image_view
+Description: Description of image_view
+Version: 1.12.15
+Cflags: -I/home/gary/catkin_ws/install/include
+Libs: -L/home/gary/catkin_ws/install/lib 
+Requires: dynamic_reconfigure

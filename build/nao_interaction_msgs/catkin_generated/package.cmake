@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "nao_interaction_msgs")
+set(nao_interaction_msgs_MAINTAINER "Manos Tsardoulias <etsardou@gmail.com>")
+set(nao_interaction_msgs_DEPRECATED "")
+set(nao_interaction_msgs_VERSION "0.1.5")
+set(nao_interaction_msgs_BUILD_DEPENDS "message_generation" "std_msgs" "actionlib_msgs" "geometry_msgs" "sensor_msgs" "nav_msgs" "trajectory_msgs")
+set(nao_interaction_msgs_RUN_DEPENDS "message_runtime" "std_msgs" "actionlib_msgs" "geometry_msgs" "sensor_msgs" "nav_msgs" "trajectory_msgs")
+set(nao_interaction_msgs_BUILDTOOL_DEPENDS "catkin")

@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "nao_interaction")
+set(nao_interaction_MAINTAINER "Manos Tsardoulias <etsardou@gmail.com>")
+set(nao_interaction_DEPRECATED "")
+set(nao_interaction_VERSION "0.1.5")
+set(nao_interaction_BUILD_DEPENDS )
+set(nao_interaction_RUN_DEPENDS "nao_interaction_msgs" "nao_interaction_launchers" "nao_audio" "nao_vision")
+set(nao_interaction_BUILDTOOL_DEPENDS "catkin")

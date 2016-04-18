@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "camera_nav")
+set(camera_nav_MAINTAINER "gary <gary@todo.todo>")
+set(camera_nav_DEPRECATED "")
+set(camera_nav_VERSION "0.0.0")
+set(camera_nav_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(camera_nav_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(camera_nav_BUILDTOOL_DEPENDS "catkin")

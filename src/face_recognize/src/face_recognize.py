@@ -33,11 +33,14 @@ class Speech(NaoqiNode):
 
     def __init__(self):
 
+        self.face_cascade = cv2.CascadeClassifier('home/gary/Desktop/haarcascade_frontalface_default.xml')
+
         self.destination = os.getcwd()
         self.params = list()
         self.params.append(cv2.cv.CV_IMWRITE_PNG_COMPRESSION)
         self.params.append(8)
         self.spokenName = {}
+        self.prevLang = 3
 
         self.notes = { 0:" Hello " , 1:" 好耐冇見呀 " , 2:" 你好 " }
         self.language = { 0:"English" , 1:"CantoneseHK" , 2:"Chinese" }
@@ -46,6 +49,7 @@ class Speech(NaoqiNode):
     	# init nao node
         NaoqiNode.__init__(self, 'face_recognize')
         self.connectNaoQi()
+        self.aLAudioDevice.setOutputVolume(0)
         self.tts.setParameter("doubleVoiceTimeShift", 0.5)
         # subscribe camera
         self.image_sub = rospy.Subscriber("/nao_robot/camera/top/camera/image_raw",Image,self.cameraCallBack)
@@ -58,6 +62,7 @@ class Speech(NaoqiNode):
 
         # enable Autonomous Life
         self.aLAutonomousLifeProxy.setState('solitary')
+        self.motionProxy.setStiffnesses("Head", 0)
         #self.aLAutonomousLifeProxy.switchFocus('interactive')
         self.aLSpeechRecognitionProxy.setAudioExpression(False)
         self.aLSpeechRecognitionProxy.setVisualExpression(False)
@@ -79,6 +84,7 @@ class Speech(NaoqiNode):
         Button(text="Learn right",command=self.facerightLearn).place(x=10,y=70)
         Button(text="Clear dict",command=self.clearDict).place(x=110,y=70)'''
         self.inputboxRemove = Entry()
+        
         self.inputboxRemove.place(x=10,y=80)
         Button(text="Forget",command=self.faceDelete).place(x=10,y=110)
         Button(text="Forget All",command=self.faceDeleteAll).place(x=10,y=140)
@@ -86,9 +92,9 @@ class Speech(NaoqiNode):
         self.directoryLabel = Label(self.root, text=self.destination)
         self.directoryLabel.place(x=10,y=200)
 
-        self.voiceVolumnv = Scale(self.root, label="voiceVolumn", from_=0, to=100, length=150, resolution=5,tickinterval=5, orient=HORIZONTAL ,command=self.voiceVolumn)
+        self.voiceVolumnv = Scale(self.root , from_=0, to=100, length=650, resolution=5,tickinterval=5, orient=HORIZONTAL ,command=self.voiceVolumn)
         self.voiceVolumnv.set(self.aLAudioDevice.getOutputVolume())
-        self.voiceVolumnv.place(x=10,y=230)
+        self.voiceVolumnv.place(x=10,y=250)
 
         self.panel = Label(self.root)
         self.panel.place(x=520,y=0)
@@ -136,7 +142,7 @@ class Speech(NaoqiNode):
         #rospy.loginfo(name)
 
         if name not in self.spokenName:
-            #rospy.loginfo(name)
+            rospy.loginfo(name)
             chineseCheck = re.findall(ur'[\u4e00-\u9fff]+', name.decode('utf-8'))
             #rospy.loginfo(chineseCheck)
             if len(chineseCheck) > 0 :
@@ -144,10 +150,12 @@ class Speech(NaoqiNode):
             else :
                 lang = randint(0,2)
 
+
             speech = randint(0,2)
 
-            self.tts.setLanguage(self.language[lang])
-            self.aLSpeechRecognitionProxy.setAudioExpression(False)
+            if self.prevLang != lang : 
+                self.tts.setLanguage(self.language[lang])
+                self.aLSpeechRecognitionProxy.setAudioExpression(False)
             # init speech speed
             greet = self.notes[lang] if speech > 1 else self.getGreet(lang)
 
@@ -156,6 +164,7 @@ class Speech(NaoqiNode):
             else:
                 speakName = name
 
+            self.prevLang = lang
             self.tts.say("\\rspd=90\\"+greet+speakName+self.string[lang][speech % len(self.string[lang])] + ",,,,,,,,,,,")
             self.logFile('see',[name])
 
@@ -171,7 +180,7 @@ class Speech(NaoqiNode):
     def getGreet(self,lang):
         currentTime = int(time.strftime('%H:%M').split(':')[0])   
 
-        greet = { 0:{ 0:'Good morning',1:'Good afternoon',2:'Good evening' }, 1:{ 0:'早上好',1:'下午好',2:'晚上好' } , 2:{ 0:'早安',1:'午安',2:'晚安' } }
+        greet = { 0:{ 0:' Good morning ',1:' Good afternoon ',2:' Good evening ' }, 1:{ 0:'早上好',1:'下午好',2:'晚上好' } , 2:{ 0:'早安',1:'午安',2:'晚安' } }
 
         if currentTime < 12 :
             return greet[lang][0]
@@ -312,9 +321,17 @@ class Speech(NaoqiNode):
 
     def cameraCallBack(self,dataImage):
         cv_image = self.bridge.imgmsg_to_cv2(dataImage, "bgr8")
+
+        gray = self.bridge.imgmsg_to_cv2(dataImage, "mono8")
+        faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
+
+        for (x,y,w,h) in faces:
+            cv2.rectangle(cv_image,(x,y),(x+w,y+h),(255,0,0),2)
+
         b,g,r = cv2.split(cv_image)
         cv_image = cv2.merge((r,g,b))
         im = Im.fromarray(cv_image)
+
         imgtk = ImageTk.PhotoImage(image=im)
         self.camera.configure(image=imgtk)
         self.camera.image = imgtk
@@ -328,6 +345,7 @@ class Speech(NaoqiNode):
         rospy.sleep(1)      
 
         self.aLAutonomousLifeProxy.setState('disabled')
+        self.aLAudioDevice.setOutputVolume(30)
 
         self.root.destroy()
 

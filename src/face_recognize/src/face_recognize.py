@@ -33,7 +33,14 @@ class Speech(NaoqiNode):
 
     def __init__(self):
 
-        self.face_cascade = cv2.CascadeClassifier('home/gary/Desktop/haarcascade_frontalface_default.xml')
+        self.face_cascade = cv2.CascadeClassifier('/home/gary/Desktop/haarcascade_frontalface_alt.xml')
+        t = float(2000)
+        self.model = cv2.createEigenFaceRecognizer(threshold=t)
+        self.modelFisher = cv2.createFisherFaceRecognizer()
+        self.modelFisher.load("/home/gary/Desktop/eigenModel.xml")
+     
+        # Load the model
+        self.model.load("/home/gary/Desktop/eigenModel.xml")
 
         self.destination = os.getcwd()
         self.params = list()
@@ -55,7 +62,7 @@ class Speech(NaoqiNode):
         self.image_sub = rospy.Subscriber("/nao_robot/camera/top/camera/image_raw",Image,self.cameraCallBack)
 
         # subscribe face detection
-        self.faceDetect = rospy.Subscriber("nao_vision/faces_detected",FaceDetected,self.faceDetected)
+        # self.faceDetect = rospy.Subscriber("nao_vision/faces_detected",FaceDetected,self.faceDetected)
         # enable face track
         #self.aLTrackerProxy.registerTarget('Face', 0.1)
         #self.aLTrackerProxy.track('Face')
@@ -84,7 +91,7 @@ class Speech(NaoqiNode):
         Button(text="Learn right",command=self.facerightLearn).place(x=10,y=70)
         Button(text="Clear dict",command=self.clearDict).place(x=110,y=70)'''
         self.inputboxRemove = Entry()
-        
+
         self.inputboxRemove.place(x=10,y=80)
         Button(text="Forget",command=self.faceDelete).place(x=10,y=110)
         Button(text="Forget All",command=self.faceDeleteAll).place(x=10,y=140)
@@ -131,6 +138,7 @@ class Speech(NaoqiNode):
 
         self.nameId = self.getImageProxy.subscribe("python_client", resolution, colorSpace, 5)
 
+    '''
     def faceDetected(self,data):
         #rospy.loginfo(self.recordedFaces)
         if( data.score_reco.data < 0.6 ):
@@ -169,6 +177,7 @@ class Speech(NaoqiNode):
             self.logFile('see',[name])
 
         self.spokenName[name] = 8
+    '''
 
     def facefrontLearn(self):
         self.faceLearn('--front')
@@ -322,11 +331,27 @@ class Speech(NaoqiNode):
     def cameraCallBack(self,dataImage):
         cv_image = self.bridge.imgmsg_to_cv2(dataImage, "bgr8")
 
-        gray = self.bridge.imgmsg_to_cv2(dataImage, "mono8")
+        gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+
         faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
+        
+        rospy.loginfo(faces)
 
         for (x,y,w,h) in faces:
             cv2.rectangle(cv_image,(x,y),(x+w,y+h),(255,0,0),2)
+            sampleImage = gray[ y:y+h , x:x+w ]
+            sampleImage = cv2.resize(sampleImage, (50,50))
+            [p_label, p_confidence] = self.model.predict(sampleImage)
+            print "Predicted label = %d (confidence=%.2f)" % (p_label, p_confidence)
+            if (p_label > -1):
+                count = 0
+                path = "/home/gary/Desktop/photo"
+                for filename in os.listdir("/home/gary/Desktop/photo"):
+                    subject_path = os.path.join(path, filename)
+                    if (count == p_label):
+                        print subject_path
+
+                    count = count+1
 
         b,g,r = cv2.split(cv_image)
         cv_image = cv2.merge((r,g,b))
@@ -341,8 +366,8 @@ class Speech(NaoqiNode):
         self.image_sub.unregister()
         rospy.sleep(1)
 
-        self.faceDetect.unregister()
-        rospy.sleep(1)      
+        #self.faceDetect.unregister()
+        #rospy.sleep(1)      
 
         self.aLAutonomousLifeProxy.setState('disabled')
         self.aLAudioDevice.setOutputVolume(30)
